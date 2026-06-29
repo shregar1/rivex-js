@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "rootDir": ".",
+    "noEmit": true,
+    "paths": {
+      "rivex": ["./src/index.ts"],
+      "rivex/*": ["./src/*"]
+    }
+  },
+  "include": ["examples/**/*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "tests"]
+}

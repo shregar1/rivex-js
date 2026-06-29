@@ -1,0 +1,99 @@
+export declare const HTTP_100_CONTINUE = 100;
+export declare const HTTP_101_SWITCHING_PROTOCOLS = 101;
+export declare const HTTP_102_PROCESSING = 102;
+export declare const HTTP_103_EARLY_HINTS = 103;
+export declare const HTTP_200_OK = 200;
+export declare const HTTP_201_CREATED = 201;
+export declare const HTTP_202_ACCEPTED = 202;
+export declare const HTTP_203_NON_AUTHORITATIVE_INFORMATION = 203;
+export declare const HTTP_204_NO_CONTENT = 204;
+export declare const HTTP_205_RESET_CONTENT = 205;
+export declare const HTTP_206_PARTIAL_CONTENT = 206;
+export declare const HTTP_207_MULTI_STATUS = 207;
+export declare const HTTP_300_MULTIPLE_CHOICES = 300;
+export declare const HTTP_301_MOVED_PERMANENTLY = 301;
+export declare const HTTP_302_FOUND = 302;
+export declare const HTTP_303_SEE_OTHER = 303;
+export declare const HTTP_304_NOT_MODIFIED = 304;
+export declare const HTTP_307_TEMPORARY_REDIRECT = 307;
+export declare const HTTP_308_PERMANENT_REDIRECT = 308;
+export declare const HTTP_400_BAD_REQUEST = 400;
+export declare const HTTP_401_UNAUTHORIZED = 401;
+export declare const HTTP_402_PAYMENT_REQUIRED = 402;
+export declare const HTTP_403_FORBIDDEN = 403;
+export declare const HTTP_404_NOT_FOUND = 404;
+export declare const HTTP_405_METHOD_NOT_ALLOWED = 405;
+export declare const HTTP_406_NOT_ACCEPTABLE = 406;
+export declare const HTTP_407_PROXY_AUTHENTICATION_REQUIRED = 407;
+export declare const HTTP_408_REQUEST_TIMEOUT = 408;
+export declare const HTTP_409_CONFLICT = 409;
+export declare const HTTP_410_GONE = 410;
+export declare const HTTP_411_LENGTH_REQUIRED = 411;
+export declare const HTTP_412_PRECONDITION_FAILED = 412;
+export declare const HTTP_413_REQUEST_ENTITY_TOO_LARGE = 413;
+export declare const HTTP_414_REQUEST_URI_TOO_LONG = 414;
+export declare const HTTP_415_UNSUPPORTED_MEDIA_TYPE = 415;
+export declare const HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+export declare const HTTP_417_EXPECTATION_FAILED = 417;
+export declare const HTTP_418_IM_A_TEAPOT = 418;
+export declare const HTTP_422_UNPROCESSABLE_ENTITY = 422;
+export declare const HTTP_423_LOCKED = 423;
+export declare const HTTP_424_FAILED_DEPENDENCY = 424;
+export declare const HTTP_425_TOO_EARLY = 425;
+export declare const HTTP_426_UPGRADE_REQUIRED = 426;
+export declare const HTTP_428_PRECONDITION_REQUIRED = 428;
+export declare const HTTP_429_TOO_MANY_REQUESTS = 429;
+export declare const HTTP_431_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
+export declare const HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS = 451;
+export declare const HTTP_500_INTERNAL_SERVER_ERROR = 500;
+export declare const HTTP_501_NOT_IMPLEMENTED = 501;
+export declare const HTTP_502_BAD_GATEWAY = 502;
+export declare const HTTP_503_SERVICE_UNAVAILABLE = 503;
+export declare const HTTP_504_GATEWAY_TIMEOUT = 504;
+export declare const HTTP_505_HTTP_VERSION_NOT_SUPPORTED = 505;
+export declare const HTTP_506_VARIANT_ALSO_NEGOTIATES = 506;
+export declare const HTTP_507_INSUFFICIENT_STORAGE = 507;
+export declare const HTTP_508_LOOP_DETECTED = 508;
+export declare const HTTP_510_NOT_EXTENDED = 510;
+export declare const HTTP_511_NETWORK_AUTHENTICATION_REQUIRED = 511;
+/** HTTP methods as a string enum. */
+export declare enum HTTPMethod {
+    GET = "GET",
+    POST = "POST",
+    PUT = "PUT",
+    DELETE = "DELETE",
+    PATCH = "PATCH",
+    HEAD = "HEAD",
+    OPTIONS = "OPTIONS",
+    TRACE = "TRACE"
+}
+/**
+ * Numeric enum mirroring APIStatus from the Python SDK.
+ * Useful for passing status codes from a typed constant.
+ */
+export declare enum APIStatus {
+    CONTINUE = 100,
+    SWITCHING_PROTOCOLS = 101,
+    OK = 200,
+    CREATED = 201,
+    ACCEPTED = 202,
+    NO_CONTENT = 204,
+    MOVED_PERMANENTLY = 301,
+    FOUND = 302,
+    NOT_MODIFIED = 304,
+    TEMPORARY_REDIRECT = 307,
+    PERMANENT_REDIRECT = 308,
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+    METHOD_NOT_ALLOWED = 405,
+    CONFLICT = 409,
+    UNPROCESSABLE_ENTITY = 422,
+    TOO_MANY_REQUESTS = 429,
+    INTERNAL_SERVER_ERROR = 500,
+    BAD_GATEWAY = 502,
+    SERVICE_UNAVAILABLE = 503,
+    GATEWAY_TIMEOUT = 504
+}
+//# sourceMappingURL=status.d.ts.map

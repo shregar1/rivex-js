@@ -1,0 +1,7 @@
+node_modules/
+
+# editor / build cruft
+.DS_Store
+
+# locally-built native addon (dev fallback only; published installs use the rivex-native package)
+native/

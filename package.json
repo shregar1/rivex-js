@@ -1,0 +1,67 @@
+{
+  "name": "rivex",
+  "version": "0.1.0",
+  "description": "Rust-powered TypeScript/JavaScript web framework",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./testing": {
+      "import": "./dist/testing.js",
+      "types": "./dist/testing.d.ts"
+    },
+    "./status": {
+      "import": "./dist/status.js",
+      "types": "./dist/status.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
+  },
+  "optionalDependencies": {
+    "rivex-native": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.19",
+    "eslint": "^9.0.0",
+    "fastify": "^5.8.5",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "web",
+    "framework",
+    "http",
+    "server",
+    "rust",
+    "typescript",
+    "api",
+    "rest",
+    "openapi"
+  ],
+  "author": "Rivex Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rivex-dev/js.rivex.vexarr.com.git"
+  },
+  "homepage": "https://rivex.vexarr.com"
+}

@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    name: Test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - run: npx vitest run
+
+  # End-to-end smoke test: build the native core (rivex-napi) from the sibling
+  # core repo, wire it in as the `rivex-native` package, boot a real server, and
+  # hit it — proving the Rust core ships and runs with the SDK.
+  smoke:
+    name: Native smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: js.rivex.vexarr.com
+      - uses: actions/checkout@v4
+        with:
+          repository: rivex-dev/core.rivex.vexarr.com
+          path: core.rivex.vexarr.com
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core.rivex.vexarr.com
+      - name: Build native addon
+        working-directory: core.rivex.vexarr.com/crates/rivex-napi
+        run: |
+          npm install
+          npx napi build --platform --release
+      - name: Wire rivex-native into the SDK
+        working-directory: js.rivex.vexarr.com
+        run: |
+          npm ci
+          npm run build
+          NAPI=../core.rivex.vexarr.com/crates/rivex-napi
+          mkdir -p node_modules/rivex-native
+          cp "$NAPI"/index.js "$NAPI"/index.d.ts "$NAPI"/package.json "$NAPI"/rivex-native.*.node node_modules/rivex-native/
+      - name: Boot server and curl
+        working-directory: js.rivex.vexarr.com
+        run: |
+          node -e "import('./dist/index.js').then(({Rivex})=>{const a=new Rivex({title:'ci'});a.get('/ping',async()=>({ok:true}));a.run('127.0.0.1',8131);})" &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8131/ping && break; sleep 0.5; done
+          curl -sf http://127.0.0.1:8131/ping | grep -q '"ok":true'
+
+  release:
+    name: Release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, test, smoke]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - name: Check for version bump
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build & publish rivex (depends on published rivex-native)
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          npm ci
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create GitHub release
+        if: steps.version.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
